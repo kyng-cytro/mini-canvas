@@ -1,6 +1,6 @@
 import classes.user as user_class
 import classes.database as database_class
-from utils.utilities import MaxAttemptsExceededError, create_new_course, create_new_user,  enroll_user_to_course, login_flow, validate_menu_input, reset_screen, validate_string_input, view_all_course_students, view_all_courses, view_all_enrollments, view_all_student_courses, view_all_users
+from utils.utilities import MaxAttemptsExceededError, create_new_course, create_new_user,  enroll_user_to_course, login_flow, quit_program, validate_menu_input, reset_screen, validate_string_input, view_all_course_students, view_all_courses, view_all_enrollments, view_all_student_courses, view_all_users, view_my_courses
 
 db = database_class.Database()
 
@@ -17,7 +17,7 @@ def main():
                 CURRENT_USER = login_flow(db)
 
             except MaxAttemptsExceededError as e:
-                quit(f"{e}")
+                quit_program(f"{e}")
 
             except Exception as e:
                 print(f"\nAn unkowned error occured {e}")
@@ -42,7 +42,7 @@ def main():
                 choice = input("Enter your choice (1-10): ")
 
                 if not validate_menu_input(choice, 1, 10):
-                    print("Invalid option. Please try again.")
+                    print("\nInvalid option. Please try again.")
                     continue
 
                 # View all users
@@ -76,11 +76,13 @@ def main():
                 if choice == "8":
                     create_new_course(db, CURRENT_USER)
 
+                # Enroll a user to a course
                 if choice == "9":
                     enroll_user_to_course(db, CURRENT_USER)
 
+                # Exit
                 if choice == "10":
-                    quit("Good bye.")
+                    quit_program("Good bye.")
 
         if isinstance(CURRENT_USER, user_class.Student):
             """
@@ -88,7 +90,22 @@ def main():
             """
             while True:
                 print(f"\nHi {CURRENT_USER.name}, Menu:")
-                break
+                print("1. View my courses")
+                print("2. Exit")
+
+                choice = input("Enter your choice (1-1): ")
+
+                if not validate_menu_input(choice, 1, 2):
+                    print("\nInvalid option. Please try again.")
+                    continue
+
+                # View my courses
+                if choice == "1":
+                    view_my_courses(db, CURRENT_USER)
+
+                # Exit
+                if choice == "2":
+                    quit_program("Good bye.")
 
     except KeyboardInterrupt:
         print("\nExited by user.")
