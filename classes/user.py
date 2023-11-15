@@ -214,7 +214,7 @@ class Admin(User):
 
         if not isinstance(user, Student):
             raise ValueError(
-                "Invalid user_id. No student with that id was found in the database.")
+                "Invalid username. No student with that name was found in the database.")
 
         course = db.read_course(course_id)
 
