@@ -83,7 +83,7 @@ def login_flow(db):
         attempts += 1
 
         if not validate_string_input(username) or not validate_string_input(password):
-            print("Invalid username or password ()")
+            print("username and password can not be empty.")
             continue
 
         user = db.read_user(username=username)
@@ -212,7 +212,7 @@ def view_all_users(db, admin):
             "\nEach dictionary in the data list should have keys corresponding to the field names.")
 
     except Exception as e:
-        print(f"\nAn unkowned error occured {e}")
+        print(f"\nAn unkowned error occured {e}.")
 
 
 def view_all_courses(db, admin):
@@ -234,7 +234,7 @@ def view_all_courses(db, admin):
             "\nEach dictionary in the data list should have keys corresponding to the field names.")
 
     except Exception as e:
-        print(f"\nAn unkowned error occured {e}")
+        print(f"\nAn unkowned error occured {e}.")
 
 
 def view_all_enrollments(db, admin):
@@ -256,7 +256,7 @@ def view_all_enrollments(db, admin):
             "\nEach dictionary in the data list should have keys corresponding to the field names.")
 
     except Exception as e:
-        print(f"\nAn unkowned error occured {e}")
+        print(f"\nAn unkowned error occured {e}.")
 
 
 def view_all_student_courses(db):
@@ -271,7 +271,7 @@ def view_all_student_courses(db):
         value = input("Enter username or id: ")
 
         if not validate_string_input(value):
-            print("\nInvalid username or id")
+            print("\nInvalid username or id.")
             return
 
         student = db.read_user(id=value, username=value)
@@ -282,14 +282,14 @@ def view_all_student_courses(db):
                 course.__dict__ for course in courses])
             return
 
-        print("\nDidn't find a student with that username or id")
+        print("\nDidn't find a student with that username or id.")
 
     except KeyError:
         print(
             "\nEach dictionary in the data list should have keys corresponding to the field names.")
 
     except Exception as e:
-        print(f"\nAn unkowned error occured {e}")
+        print(f"\nAn unkowned error occured {e}.")
 
 
 def view_all_course_students(db):
@@ -304,7 +304,7 @@ def view_all_course_students(db):
         value = input("Enter course id: ")
 
         if not validate_string_input(value):
-            print("\nCourse id can not be empty")
+            print("\nCourse id can not be empty.")
             return
 
         course = db.read_course(id=value)
@@ -315,14 +315,14 @@ def view_all_course_students(db):
                 user.__dict__ for user in users])
             return
 
-        print("\nDidn't find a course with that id")
+        print("\nDidn't find a course with that id.")
 
     except KeyError:
         print(
             "\nEach dictionary in the data list should have keys corresponding to the field names.")
 
     except Exception as e:
-        print(f"\nAn unkowned error occured {e}")
+        print(f"\nAn unkowned error occured {e}.")
 
 
 def create_new_user(db, admin, role: str):
@@ -341,27 +341,27 @@ def create_new_user(db, admin, role: str):
         password = input(f"Enter {role}'s password: ")
 
         if not validate_string_input(username):
-            print("\nUsername can not be empty")
+            print("\nUsername can not be empty.")
             return
 
         if not validate_string_input(full_name):
-            print("\nFull name can not be empty")
+            print("\nFull name can not be empty.")
             return
 
         if not validate_string_input(password):
-            print("\nPassword can not be empty")
+            print("\nPassword can not be empty.")
             return
 
         student = admin.create_user(
             db, full_name, username, password, role)
 
-        print(f"\n{role.title()} Created Successfully {student}")
+        print(f"\n{role.title()} Created Successfully {student}.")
 
     except ValueError as e:
         print(f"\n{e}")
 
     except Exception as e:
-        print(f"\nAn unkowned error occured {e}")
+        print(f"\nAn unkowned error occured {e}.")
 
 
 def create_new_course(db, admin):
@@ -379,17 +379,17 @@ def create_new_course(db, admin):
             "Enter the course description: ")
 
         if not validate_string_input(course_name):
-            print("\nCourse name can not be empty")
+            print("\nCourse name can not be empty.")
             return
 
         if not validate_string_input(course_description):
-            print("\nCourse description can not be empty")
+            print("\nCourse description can not be empty.")
             return
 
         course = admin.create_course(
             db, course_name, course_description)
 
-        print(f"\nCourse Created Successfully {course}")
+        print(f"\nCourse Created Successfully {course}.")
 
     except Exception as e:
         print(f"\nAn unkowned error occured {e}")
@@ -421,16 +421,38 @@ def enroll_user_to_course(db, admin):
             db,  username, course_id)
 
         print(
-            f"\nEnrollment Created Successfully {enrollment}")
+            f"\nEnrollment Created Successfully {enrollment}.")
 
     except ValueError as e:
         print(f"\n{e}")
 
     except Exception as e:
-        print(f"\nAn unkowned error occured {e}")
+        print(f"\nAn unkowned error occured {e}.")
 
 
-def quit(message: str):
+def view_my_courses(db, student):
+    """
+    Student action, Shows a table of all enrolled courses.
+
+    Parameters:
+    - db (Database): The Database instance.
+    - student (Student): Student user performing action.
+    """
+    reset_screen()
+    try:
+        courses = student.get_enrolled_courses(db)
+        display_table(
+            "My Course", ["id", "name", "description", "creator", "created_at"], [course.__dict__ for course in courses])
+
+    except KeyError:
+        print(
+            "\nEach dictionary in the data list should have keys corresponding to the field names.")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}.")
+
+
+def quit_program(message: str):
     """
     Admin and Student action, Exits the program.
 
@@ -438,4 +460,4 @@ def quit(message: str):
     - message (str): sys exit message.
 
     """
-    sys.exit("Good bye.")
+    sys.exit(message)
