@@ -1,8 +1,11 @@
 import os
+import sys
 import uuid
 import hashlib
 from getpass import getpass
 from datetime import datetime
+import classes.user as user_class
+import classes.course as course_class
 from prettytable import PrettyTable
 
 
@@ -14,28 +17,21 @@ class MaxAttemptsExceededError(Exception):
     pass
 
 
-def clear_screen():
-    """
-    Clears the terminal screen.
-    """
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
 def reset_screen():
-    clear_screen()
+    os.system('cls' if os.name == 'nt' else 'clear')
     print(
         """
-   ▄▄   ▄▄ ▄▄▄ ▄▄    ▄ ▄▄▄    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄ ▄▄    ▄ ▄▄   ▄▄ ▄▄▄▄▄▄ ▄▄▄▄▄▄▄ 
+   ▄▄   ▄▄ ▄▄▄ ▄▄    ▄ ▄▄▄    ▄▄▄▄▄▄▄ ▄▄▄▄▄▄ ▄▄    ▄ ▄▄   ▄▄ ▄▄▄▄▄▄ ▄▄▄▄▄▄▄
   █  █▄█  █   █  █  █ █   █  █       █      █  █  █ █  █ █  █      █       █
   █       █   █   █▄█ █   █  █       █  ▄   █   █▄█ █  █▄█  █  ▄   █  ▄▄▄▄▄█
-  █       █   █       █   █  █     ▄▄█ █▄█  █       █       █ █▄█  █ █▄▄▄▄▄ 
+  █       █   █       █   █  █     ▄▄█ █▄█  █       █       █ █▄█  █ █▄▄▄▄▄
   █       █   █  ▄    █   █  █    █  █      █  ▄    █       █      █▄▄▄▄▄  █
   █ ██▄██ █   █ █ █   █   █  █    █▄▄█  ▄   █ █ █   ██     ██  ▄   █▄▄▄▄▄█ █
   █▄█   █▄█▄▄▄█▄█  █▄▄█▄▄▄█  █▄▄▄▄▄▄▄█▄█ █▄▄█▄█  █▄▄█ █▄▄▄█ █▄█ █▄▄█▄▄▄▄▄▄▄█
 """)
 
 
-def validate_string_input(input_string):
+def validate_string_input(input_string: str):
     """
     Validates string input.
 
@@ -48,7 +44,7 @@ def validate_string_input(input_string):
     return isinstance(input_string, str) and len(input_string) > 0
 
 
-def validate_menu_input(input_value, min_value, max_value):
+def validate_menu_input(input_value: str, min_value: int, max_value: int):
     """
     Validates menu input to ensure it is a number within a given range.
 
@@ -87,7 +83,7 @@ def login_flow(db):
         attempts += 1
 
         if not validate_string_input(username) or not validate_string_input(password):
-            print("Invalid username or password")
+            print("Invalid username or password ()")
             continue
 
         user = db.read_user(username=username)
@@ -127,7 +123,7 @@ def get_current_datetime():
     return current_datetime.isoformat()
 
 
-def hash_password(password):
+def hash_password(password: str):
     """
     Hash a password using SHA-256.
 
@@ -152,7 +148,7 @@ def hash_password(password):
     return hashed_password
 
 
-def compare_password_to_hash(password, hashed_password):
+def compare_password_to_hash(password: str, hashed_password: str):
     """
     Compare a password to its hashed version.
 
@@ -195,3 +191,251 @@ def display_table(entity_name: str, field_names: list[str], data: list[dict]):
     print(header)
     print(separator)
     print(table)
+
+
+def view_all_users(db, admin):
+    """
+    Admin action, Shows a table of all users.
+
+    Parameters:
+    - db (Database): The Database instance.
+    - admin (Admin): Admin user performing action.
+    """
+    reset_screen()
+    try:
+        users = admin.get_all_users(db)
+        display_table(
+            "User", ["id", "username", "name", "role", "creator", "created_at"], [user.__dict__ for user in users])
+
+    except KeyError:
+        print(
+            "\nEach dictionary in the data list should have keys corresponding to the field names.")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def view_all_courses(db, admin):
+    """
+    Admin action, Shows a table of all courses.
+
+    Parameters:
+    - db (Database): The Database instance.
+    - admin (Admin): Admin user performing action.
+    """
+    reset_screen()
+    try:
+        courses = admin.get_all_courses(db)
+        display_table(
+            "Course", ["id", "name", "description", "creator", "created_at"], [course.__dict__ for course in courses])
+
+    except KeyError:
+        print(
+            "\nEach dictionary in the data list should have keys corresponding to the field names.")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def view_all_enrollments(db, admin):
+    """
+    Admin action, Shows a table of all courses.
+
+    Parameters:
+    - db (Database): The Database instance.
+    - admin (Admin): Admin user performing action.
+    """
+    reset_screen()
+    try:
+        enrollments = admin.get_all_enrollments(db)
+        display_table(
+            "Enrollment", ["id", "user_id", "username", "course_id", "course_name", "creator", "created_at"], [enrollment.__dict__ for enrollment in enrollments])
+
+    except KeyError:
+        print(
+            "\nEach dictionary in the data list should have keys corresponding to the field names.")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def view_all_student_courses(db):
+    """
+    Admin action, Shows a table of a student's enrolled courses.
+
+    Parameters:
+    - db (Database): The Database instance.
+    """
+    reset_screen()
+    try:
+        value = input("Enter username or id: ")
+
+        if not validate_string_input(value):
+            print("\nInvalid username or id")
+            return
+
+        student = db.read_user(id=value, username=value)
+
+        if isinstance(student, user_class.Student):
+            courses = student.get_enrolled_courses(db)
+            display_table(f"{student.name}'s Course", ["id", "name", "description", "creator", "created_at"], [
+                course.__dict__ for course in courses])
+            return
+
+        print("\nDidn't find a student with that username or id")
+
+    except KeyError:
+        print(
+            "\nEach dictionary in the data list should have keys corresponding to the field names.")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def view_all_course_students(db):
+    """
+    Admin action, Shows a table of a course's enrolled students.
+
+    Parameters:
+    - db (Database): The Database instance.
+    """
+    reset_screen()
+    try:
+        value = input("Enter course id: ")
+
+        if not validate_string_input(value):
+            print("\nCourse id can not be empty")
+            return
+
+        course = db.read_course(id=value)
+
+        if isinstance(course, course_class.Course):
+            users = course.get_enrolled_students(db)
+            display_table(f"{course.name}'s Student", ["id", "username", "name", "role", "creator", "created_at"], [
+                user.__dict__ for user in users])
+            return
+
+        print("\nDidn't find a course with that id")
+
+    except KeyError:
+        print(
+            "\nEach dictionary in the data list should have keys corresponding to the field names.")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def create_new_user(db, admin, role: str):
+    """
+    Admin action, Creates a new Student or Admin based to given role.
+
+    Parameters:
+    - db (Database): The Database instance.
+    - admin (Admin): Admin user performing action.
+    - role (str): Type of user to create (student or admin)
+    """
+    reset_screen()
+    try:
+        username = input(f"Enter {role}'s username: ")
+        full_name = input(f"Enter {role}'s full name: ")
+        password = input(f"Enter {role}'s password: ")
+
+        if not validate_string_input(username):
+            print("\nUsername can not be empty")
+            return
+
+        if not validate_string_input(full_name):
+            print("\nFull name can not be empty")
+            return
+
+        if not validate_string_input(password):
+            print("\nPassword can not be empty")
+            return
+
+        student = admin.create_user(
+            db, full_name, username, password, role)
+
+        print(f"\n{role.title()} Created Successfully {student}")
+
+    except ValueError as e:
+        print(f"\n{e}")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def create_new_course(db, admin):
+    """
+    Admin action, Creates a new course.
+
+    Parameters:
+    - db (Database): The Database instance.
+    - admin (Admin): Admin user performing action.
+    """
+    reset_screen()
+    try:
+        course_name = input("Enter the course name: ")
+        course_description = input(
+            "Enter the course description: ")
+
+        if not validate_string_input(course_name):
+            print("\nCourse name can not be empty")
+            return
+
+        if not validate_string_input(course_description):
+            print("\nCourse description can not be empty")
+            return
+
+        course = admin.create_course(
+            db, course_name, course_description)
+
+        print(f"\nCourse Created Successfully {course}")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def enroll_user_to_course(db, admin):
+    """
+    Admin action, Enrolls student to course.
+
+    Parameters:
+    - db (Database): The Database instance.
+    - admin (Admin): Admin user performing action.
+    """
+    reset_screen()
+    try:
+        username = input("Enter username of user to enroll: ")
+        course_id = input(
+            "Enter course id of course to enroll to: ")
+
+        if not validate_string_input(username):
+            print("\nUsername can not be empty")
+            return
+
+        if not validate_string_input(course_id):
+            print("\nFull name can not be empty")
+            return
+
+        enrollment = admin.create_enrollment(
+            db,  username, course_id)
+
+        print(
+            f"\nEnrollment Created Successfully {enrollment}")
+
+    except ValueError as e:
+        print(f"\n{e}")
+
+    except Exception as e:
+        print(f"\nAn unkowned error occured {e}")
+
+
+def quit(message: str):
+    """
+    Admin and Student action, Exits the program.
+
+    Parameters:
+    - message (str): sys exit message.
+
+    """
+    sys.exit("Good bye.")
