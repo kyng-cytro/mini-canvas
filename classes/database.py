@@ -14,9 +14,10 @@ class Database:
         Parameters:
         - folder_path (str): Folder path to store all csv files
         """
-        self.users_file = f"{folder_path}/users.csv"
-        self.courses_file = f"{folder_path}/courses.csv"
-        self.enrollments_file = f"{folder_path}/enrollments.csv"
+        self.folder_path = folder_path
+        self.users_file = os.path.join(folder_path, 'users.csv')
+        self.courses_file = os.path.join(folder_path, "courses.csv")
+        self.enrollments_file = os.path.join(folder_path, "enrollments.csv")
         self.defualt_field_names = ['creator', 'created_at', 'updated_at']
         self.users_field_names = ['id', 'name', 'username',
                                   'password', 'role', *self.defualt_field_names]
@@ -24,7 +25,12 @@ class Database:
                                     *self.defualt_field_names]
         self.enrollments_field_names = ['id', 'user_id', 'username', 'course_id', 'course_name',
                                         *self.defualt_field_names]
+
         self._check_and_create_files()
+
+    def _check_folder_path(self):
+        # Create the folder if it doesn't exist
+        os.makedirs(self.folder_path, exist_ok=True)
 
     def _check_and_create_files(self):
         """
@@ -32,6 +38,8 @@ class Database:
         """
         file_paths = [self.users_file,
                       self.courses_file, self.enrollments_file]
+
+        self._check_folder_path()
 
         for file_path in file_paths:
             if not os.path.exists(file_path):
