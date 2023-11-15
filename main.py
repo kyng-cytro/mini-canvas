@@ -1,6 +1,6 @@
 import classes.user as user_class
 import classes.database as database_class
-from utils.utilities import MaxAttemptsExceededError, create_new_course, create_new_user,  enroll_user_to_course, login_flow, quit_program, validate_menu_input, reset_screen, validate_string_input, view_all_course_students, view_all_courses, view_all_enrollments, view_all_student_courses, view_all_users, view_my_courses
+from utils.utilities import MaxAttemptsExceededError, create_new_course, create_new_user,  enroll_user_to_course, login_flow, quit_program, validate_menu_input, reset_screen, view_all_course_students, view_all_courses, view_all_enrollments, view_all_student_courses, view_all_users, view_my_courses
 
 db = database_class.Database()
 
