@@ -217,11 +217,11 @@ def main():
                             "Enter the course description: ")
 
                         if not validate_string_input(course_name):
-                            print("\nUsername can not be empty")
+                            print("\nCourse name can not be empty")
                             continue
 
                         if not validate_string_input(course_description):
-                            print("\nFull name can not be empty")
+                            print("\nCourse description can not be empty")
                             continue
 
                         course = CURRENT_USER.create_course(
@@ -229,11 +229,38 @@ def main():
 
                         print(f"\nCourse Created Successfully {course}")
 
+                    except Exception as e:
+                        print(f"\nAn unkowned error occured {e}")
+
+                if choice == "9":
+                    reset_screen()
+                    try:
+                        username = input("Enter username of user to enroll: ")
+                        course_id = input(
+                            "Enter course id of course to enroll to: ")
+
+                        if not validate_string_input(username):
+                            print("\nUsername can not be empty")
+                            continue
+
+                        if not validate_string_input(course_id):
+                            print("\nFull name can not be empty")
+                            continue
+
+                        enrollment = CURRENT_USER.create_enrollment(
+                            db,  username, course_id)
+
+                        print(
+                            f"\nEnrollment Created Successfully {enrollment}")
+
                     except ValueError as e:
                         print(f"\n{e}")
 
                     except Exception as e:
                         print(f"\nAn unkowned error occured {e}")
+
+                if choice == "10":
+                    sys.exit("Good bye.")
 
         if isinstance(CURRENT_USER, user_class.Student):
             """
@@ -244,7 +271,7 @@ def main():
                 break
 
     except KeyboardInterrupt:
-        print("\nExited by user")
+        print("\nExited by user.")
 
 
 if __name__ == "__main__":
