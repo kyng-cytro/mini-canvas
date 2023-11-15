@@ -442,7 +442,7 @@ def view_my_courses(db, student):
     try:
         courses = student.get_enrolled_courses(db)
         display_table(
-            "My Course", ["id", "name", "description", "creator", "created_at"], [course.__dict__ for course in courses])
+            "My Courses", ["id", "name", "description", "creator", "created_at"], [course.__dict__ for course in courses])
 
     except KeyError:
         print(
