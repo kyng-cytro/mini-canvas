@@ -1,3 +1,6 @@
+import classes.database as database_module
+
+
 class Course:
     def __init__(self, id: str, name: str, description: str, creator: str, created_at: str, updated_at: str):
         """
@@ -26,3 +29,23 @@ class Course:
         - str: A string representing the Course object.
         """
         return f"Id {self.id} (Name: {self.name}, Description: {self.description})"
+
+    def get_enrolled_students(self, db: database_module.Database):
+        """
+        Get a list of students enrolled to the course.
+
+        Parameters:
+        - db (Database): The Database instance.
+
+        Returns:
+        - list[Student]: A list of students enrolled to the course.
+        """
+        enrollments = db.query_enrollments(course_id=self.id)
+
+        students = []
+        for enrollment in enrollments:
+            student = db.read_user(id=enrollment.user_id)
+            if student:
+                students.append(student)
+
+        return students

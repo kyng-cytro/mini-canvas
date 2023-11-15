@@ -43,12 +43,18 @@ class User:
 
         Returns:
         - User: An instance of either Admin or Student based on the role.
+
+        Raises:
+        - ValueError: If role is invalid.
         """
+        if self.role not in ['student', 'admin']:
+            raise ValueError(
+                "Invalid role. Allowed roles: student, admin")
+
         if self.role == "admin":
             return Admin(**self.__dict__)
 
-        elif self.role == 'student':
-            return Student(**self.__dict__)
+        return Student(**self.__dict__)
 
 
 class Admin(User):
@@ -147,6 +153,9 @@ class Admin(User):
 
         Returns:
         - User: User record.
+
+        Raises:
+        - ValueError: If role is invalid.
         """
         if role not in ['student', 'admin']:
             raise ValueError(
