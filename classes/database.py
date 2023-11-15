@@ -144,7 +144,7 @@ class Database:
         Returns:
         - list[User]: A list of either Admin or Student based on the role.
           """
-        users = []
+        users: list[user_class.Admin | user_class.Student] = []
 
         with open(self.users_file, 'r', newline='') as file:
             reader = csv.DictReader(file)
@@ -171,7 +171,7 @@ class Database:
         with open(self.users_file, 'r', newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                if (id == "" or row['id'] == id) and (username == "" or row['username'] == username):
+                if row['id'] == id or row['username'] == username:
                     return user_class.User(**row).to_admin_or_student()
 
     def write_user(self, user: dict):
@@ -201,7 +201,7 @@ class Database:
         Returns:
         - list[Course]: A list of courses.
           """
-        courses = []
+        courses: list[course_class.Course] = []
 
         with open(self.courses_file, 'r', newline='') as file:
             reader = csv.DictReader(file)
@@ -249,7 +249,7 @@ class Database:
         Returns:
         - list[Enrollment]: A list of enrollments.
           """
-        enrollments = []
+        enrollments: list[enrollment_class.Enrollment] = []
 
         with open(self.enrollments_file, 'r', newline='') as file:
             reader = csv.DictReader(file)
@@ -287,14 +287,12 @@ class Database:
         Returns:
         - list[Enrollment]: A list of Enrollment records that match the given criteria.
         """
-        enrollments = []
+        enrollments: list[enrollment_class.Enrollment] = []
 
         with open(self.enrollments_file, 'r', newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                if (not user_id or row['user_id'] == user_id) and \
-                    (not username or row['username'] == username) and \
-                        (not course_id or row['course_id'] == course_id):
+                if row['user_id'] == user_id or row['username'] == username or row['course_id'] == course_id:
                     enrollment = enrollment_class.Enrollment(**row)
                     enrollments.append(enrollment)
 
