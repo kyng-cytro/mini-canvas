@@ -194,13 +194,13 @@ class Admin(User):
 
         return course
 
-    def create_enrollment(self, db: database_module.Database, user_id: str, course_id: str):
+    def create_enrollment(self, db: database_module.Database, username: str, course_id: str):
         """
         Create a new enrollment.
 
         Parameters:
         - db (Database): The Database instance.
-        - user_id (str): The id of the user.
+        - username (str): The username the user.
         - course_id (str): The id of the  course.
 
         Returns:
@@ -210,7 +210,7 @@ class Admin(User):
         - ValueError: If user or course id is invalid.
         """
 
-        user = db.read_user(user_id)
+        user = db.read_user(username=username)
 
         if not isinstance(user, Student):
             raise ValueError(
