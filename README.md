@@ -19,8 +19,10 @@ Follow these steps to set up Mini Canvas:
    ```
 
 3. Log in as the super admin:
+
    - Username: **`admin`**
    - Password: **`admin`**
+
 4. The default database route is '/data'. You can customize this in the **`main.py`** file.
 
 ## Usage
@@ -53,7 +55,7 @@ The application consists of several modules:
 
 ## Database Class
 
-The **`Database`** class in the **`database.py`** file provides functionality to interact with user, course, and enrollment data in the Mini Canvas application. It manages the storage of this data in CSV files, allowing for reading, writing, and querying operations.
+The **`Database`** class provides functionality to interact with user, course, and enrollment data in the Mini Canvas application. It manages the storage of this data in CSV files, allowing for reading, writing, and querying operations.
 
 ### Class Initialization
 
