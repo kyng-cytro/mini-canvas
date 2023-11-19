@@ -29,5 +29,4 @@ class Enrollment:
         Returns:
         - str: A string representing the Enrollment object.
         """
-
         return f"Id {self.id} (Username: {self.username}, Course Name: {self.course_name})"

@@ -93,7 +93,7 @@ def main():
                 print("1. View my courses")
                 print("2. Exit")
 
-                choice = input("Enter your choice (1-1): ")
+                choice = input("Enter your choice (1-2): ")
 
                 if not validate_menu_input(choice, 1, 2):
                     print("\nInvalid option. Please try again.")
