@@ -42,7 +42,7 @@ class User:
         Convert the User object to either an Admin or Student based on the role.
 
         Returns:
-        - User: An instance of either Admin or Student based on the role.
+        - Admin | Student: An instance of either Admin or Student based on the role.
 
         Raises:
         - ValueError: If role is invalid.
@@ -209,7 +209,6 @@ class Admin(User):
         Raises:
         - ValueError: If user or course id is invalid.
         """
-
         user = db.read_user(username=username)
 
         if not isinstance(user, Student):
