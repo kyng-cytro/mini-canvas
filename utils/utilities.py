@@ -80,7 +80,7 @@ def login_flow(db):
 
     while attempts < MAX_ATTEMPTS:
         username = input("Enter your username: ")
-        password = getpass(prompt="Enter your password: ")
+        password = getpass(prompt="Enter your password (hidden): ")
 
         attempts += 1
 
@@ -341,7 +341,7 @@ def create_new_user(db, admin, role: str):
     try:
         username = input(f"Enter {role}'s username: ")
         full_name = input(f"Enter {role}'s full name: ")
-        password = input(f"Enter {role}'s password: ")
+        password = getpass(prompt=f"Enter {role}'s password (hidden): ")
 
         if not validate_string_input(username):
             print("\nUsername can not be empty.")
