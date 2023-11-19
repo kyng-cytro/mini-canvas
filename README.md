@@ -307,7 +307,7 @@ db.read_users()
 
 ## User Class
 
-Parent class for users
+The **`User`** class represents a generic user in the educational management system. This class serves as the base class for more specialized user types, namely Admin and Student. Each instance of the User class encapsulates essential information about a user, including a unique identifier, name, username, hashed password, role (such as admin or student), the creator (admin who created the user), and timestamps indicating when the user was created and last updated.
 
 ### Initialization
 
