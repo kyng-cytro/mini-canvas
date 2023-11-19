@@ -29,7 +29,7 @@ def reset_screen():
   █ ██▄██ █   █ █ █   █   █  █    █▄▄█  ▄   █ █ █   ██     ██  ▄   █▄▄▄▄▄█ █
   █▄█   █▄█▄▄▄█▄█  █▄▄█▄▄▄█  █▄▄▄▄▄▄▄█▄█ █▄▄█▄█  █▄▄█ █▄▄▄█ █▄█ █▄▄█▄▄▄▄▄▄▄█
   
-                                                            by Tolulope Bello
+                                                            by Cytro
 """)
 
 
@@ -195,6 +195,7 @@ def display_table(entity_name: str, field_names: list[str], data: list[dict]):
     print(table)
 
 
+# User Actions
 def view_all_users(db, admin):
     """
     Admin action, Shows a table of all users.
