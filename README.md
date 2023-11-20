@@ -445,7 +445,7 @@ def get_enrollments_by_user(self, db: database_module.Database, username: str):
     """
 ```
 
-Get Enrollment By user_id
+Get Enrollments By user_id
 
 ```python
 def get_enrollments_by_user_id(self, db: database_module.Database, user_id: str):
@@ -461,7 +461,7 @@ def get_enrollments_by_user_id(self, db: database_module.Database, user_id: str)
     """
 ```
 
-Get Enrollment By course_id
+Get Enrollments By course_id
 
 ```python
 def get_enrollments_by_course_id(self, db: database_module.Database, course_id: str):
@@ -694,6 +694,10 @@ print(new_enrollment)
 ```
 
 ## Utilities Module
+
+The **`utilities`** module provides a set of utility functions and actions essential for the proper functioning of the educational management system. These utilities encompass a range of functionalities, including user authentication, input validation, screen clearing for a better user interface, and the generation of unique identifiers and timestamps. Additionally, the module includes error handling for scenarios where maximum login attempts are exceeded.
+
+### Functions and Actions
 
 Reset Screen
 
